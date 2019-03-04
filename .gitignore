@@ -1,0 +1,11 @@
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+target
+.idea
+.classpath
+.project
+*.iml

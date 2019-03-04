@@ -1,0 +1,20 @@
+# _*_coding:utf-8_*_
+
+# 创建用户  ：chenzhengwei
+
+# 创建日期  ：2019/3/1 下午3:59
+
+1.蓝图构建
+
+    # 1 首先在应用的初始文件中定义蓝图
+    # 2 注册蓝图
+    # 3 在视图文件中调用蓝图
+
+2.数据库安装及其配置
+
+    1 安装数据库连接依赖包
+        pip install flask-sqlalchemy
+    2 定义mysql数据库连接
+        from flask_sqlalchemy import SQLAlchemy
+        from flask import Flask
+

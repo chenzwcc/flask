@@ -4,8 +4,7 @@
 
 # 创建日期  ：2019/3/1 下午3:50
 
-from flask import Flask
-
+from flask import Flask, render_template
 
 app = Flask(__name__)
 app.debug=True
@@ -15,4 +14,9 @@ from app.home import home as home_blueprint
 
 
 app.register_blueprint(admin_blueprint,url_prefix="/admin")
-app.register_blueprint(home_blueprint,url_prefix='/home')
+app.register_blueprint(home_blueprint)
+
+
+@app.errorhandler(404)
+def page_not_found(err):
+    return render_template('home/404.html'), 404

@@ -5,7 +5,8 @@
 dist
 build
 target
-.idea
+.idea/
 .classpath
 .project
 *.iml
+test.py

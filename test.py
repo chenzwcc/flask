@@ -4,3 +4,17 @@
 
 # 创建日期  ：2019/3/4 上午10:57
 
+from functools import wraps
+
+
+def onner(func):
+    @wraps(func)
+    def inner(*args,**kwargs):
+        return func(*args,**kwargs)
+    return inner
+
+@onner
+def funcc():
+    print('p')
+
+print(funcc.__name__)

@@ -2,16 +2,7 @@
 # 创建用户  ：chenzhengwei
 # 创建日期  ：2019/3/1 下午3:52
 import datetime
-import pymysql
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:chenzwcc@127.0.0.1:3306/movie'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-db = SQLAlchemy(app)
+from app import db
 
 
 class User(db.Model):
@@ -165,6 +156,10 @@ class Admin(db.Model):
 
     def __str__(self):
         return "<Admin %s>" % self.name
+
+    def check_pwd(self, pwd):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd, pwd)
 
 
 class Adminlog(db.Model):

@@ -3,12 +3,13 @@
 # 创建用户  ：chenzhengwei
 
 # 创建日期  ：2019/3/1 下午3:52
+import datetime
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 
-from app.models import Admin
+from app.models import Admin, Tag, Movie
 
 
 class LoginForm(FlaskForm):
@@ -71,3 +72,117 @@ class TagForm(FlaskForm):
             "class": "btn btn-primary"
         }
     )
+
+
+class MovieForm(FlaskForm):
+    """电影表单"""
+    title = StringField(
+        label='电影名称',
+        validators=[
+            DataRequired('请输入电影名称')
+        ],
+        description='电影名称',
+        render_kw={
+            "class": "form-control",
+            "id": "input_title",
+            "placeholder": "请输入电影名称！"
+        }
+    )
+    url = FileField(
+        label='电影文件',
+        validators=[
+            DataRequired('请上传电影文件')
+        ],
+        description='电影文件',
+
+    )
+    info = TextAreaField(
+        label='电影简介',
+        validators=[
+            DataRequired('请输入电影简介')
+        ],
+        description='电影简介',
+        render_kw={
+            "class": "form-control",
+            "id": "input_info",
+            "placeholder": "请输入电影简介！",
+            "rows": 10
+        }
+    )
+    logo = FileField(
+        label='电影封面',
+        validators=[
+            DataRequired('请输入电影封面')
+        ],
+        description='电影封面',
+    )
+    star = SelectField(
+        label='电影星级',
+        validators=[
+            DataRequired('请选择电影星级')
+        ],
+        description='电影星级',
+        coerce=int,
+        choices=[(1,'1星'),(2,'2星'),(3,'3星'),(4,'4星'),(5,'5星')],
+        render_kw={
+            "class":"form-control",
+        }
+    )
+    tag_id = SelectField(
+        label='电影标签',
+        validators=[
+            DataRequired('请选择电影标签')
+        ],
+        description='电影标签',
+        coerce=int,
+        choices=[(val.id, val.name) for val in Tag.query.all()],
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    area = StringField(
+        label='电影上映地区',
+        validators=[
+            DataRequired('请输入电影上映地区')
+        ],
+        description='电影上映地区',
+        render_kw={
+            "class": "form-control",
+            "placeholder": "电影上映地区！"
+        }
+    )
+    length = StringField(
+        label="电影片长",
+        validators=[
+            DataRequired("请输入电影片长！")
+        ],
+        description="电影片长",
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入电影片长！"
+        }
+    )
+    release_time = StringField(
+        label="电影上映时间",
+        validators=[
+            DataRequired("请选择电影上映时间！")
+        ],
+        description="电影上映时间",
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请选择电影上映时间！",
+            "id": "input_release_time"
+        }
+    )
+    submit = SubmitField(
+        '编辑',
+        render_kw={
+            "class": "btn btn-primary",
+        }
+    )
+
+    def validate_title(self, field):
+        title = field.data
+        num = Movie.query.filter_by(title=title).count()
+        if num > 0:
+            raise ValidationError("该电影已存在!")

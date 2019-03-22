@@ -9,7 +9,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 
-from app.models import Admin, Tag, Movie
+from app.models import Admin, Tag, Movie, Preview
 
 
 class LoginForm(FlaskForm):
@@ -46,6 +46,7 @@ class LoginForm(FlaskForm):
     )
 
     def validate_account(self,field):
+        """该方法的目的是保证account唯一，如果在此提交为修改该字段就会raise"""
         account = field.data
         admin_obj = Admin.query.filter_by(name=account).count()
         if admin_obj == 0:
@@ -186,3 +187,37 @@ class MovieForm(FlaskForm):
         num = Movie.query.filter_by(title=title).count()
         if num > 0:
             raise ValidationError("该电影已存在!")
+
+
+class PreviewForm(FlaskForm):
+    """预告片表单"""
+    title = StringField(
+        label='预告标题',
+        validators=[
+            DataRequired("请输入预告标题!")
+        ],
+        description="预告标题",
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入预告标题！"
+        }
+    )
+    logo = FileField(
+        label='预告封面',
+        validators=[
+            DataRequired("请上传预告封面!"),
+        ],
+        description="预告封面",
+    )
+    submit = SubmitField(
+        '编辑',
+        render_kw={
+            "class": "btn btn-primary"
+        }
+    )
+
+    def validate_title(self,field):
+        title = field.data
+        num = Preview.query.filter_by(title=title).count()
+        if num > 0:
+            raise ValidationError('该预告片已存在')

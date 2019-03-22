@@ -309,6 +309,7 @@ def preview_edit(id=None):
 @admin.route('/user/view/')
 @admin_login_req
 def user_view():
+    
     return render_template('admin/user_view.html')
 
 
